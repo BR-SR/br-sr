@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Directory Listing</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; }
+    ul { list-style: none; padding: 0; }
+    li { margin: 0.8em 0; }
+    a { font-size: 1.2em; color: #007acc; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Auto Directory Listing</h1>
+  <ul id="listing"></ul>
+  <script>
+    // EDIT these!
+    const user = 'YOUR_USER';
+    const repo = 'YOUR_REPO';
+    // If you use a branch other than `main` set it here.
+    const branch = 'main'; 
+
+    async function listFolders() {
+      const url = `https://api.github.com/repos/${user}/${repo}/contents/`;
+      const res = await fetch(url);
+      const files = await res.json();
+      const list = document.getElementById('listing');
+      files.forEach(file => {
+        if (file.type === 'dir') {
+          // Exclude special or system folders if you want
+          if (!['.github', 'node_modules'].includes(file.name)) {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="${file.name}/">${file.name}</a>`;
+            list.appendChild(li);
+          }
+        }
+      });
+    }
+    listFolders();
+  </script>
+</body>
+</html>
