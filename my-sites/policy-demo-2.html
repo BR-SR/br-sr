@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Policy Assessment | Dataset Compliance Analyzer</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --liberty-blue: #0052A5;
+      --liberty-red: #BF0A30;
+      --liberty-gold: #FFD700;
+      --liberty-light: #F8F9FA;
+      --liberty-dark: #212529;
+    }
+    
+    body {
+      background-color: var(--liberty-light);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    
+    .header-gradient {
+      background: linear-gradient(135deg, var(--liberty-blue) 0%, #1E40AF 100%);
+    }
+    
+    .nav-item {
+      position: relative;
+      padding-bottom: 4px;
+    }
+    
+    .nav-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--liberty-gold);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-item:hover::after {
+      width: 100%;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .upload-area {
+      border: 2px dashed #D1D5DB;
+      border-radius: 12px;
+      background: rgba(249, 250, 251, 0.5);
+      transition: all 0.3s ease;
+    }
+    
+    .upload-area:hover {
+      border-color: var(--liberty-blue);
+      background: rgba(239, 246, 255, 0.5);
+    }
+    
+    .upload-area.dragover {
+      border-color: var(--liberty-blue);
+      background: rgba(219, 234, 254, 0.5);
+    }
+    
+    .risk-meter {
+      height: 8px;
+      border-radius: 4px;
+      background: #E5E7EB;
+      overflow: hidden;
+    }
+    
+    .risk-meter-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+    
+    .compliance-score {
+      width: 100px;
+      height: 100px;
+      position: relative;
+    }
+    
+    .compliance-score svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .compliance-score-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+    
+    .timeline-item {
+      position: relative;
+      padding-left: 28px;
+      padding-bottom: 24px;
+      border-left: 2px solid #E5E7EB;
+    }
+    
+    .timeline-item:last-child {
+      border-left-color: transparent;
+      padding-bottom: 0;
+    }
+    
+    .timeline-dot {
+      position: absolute;
+      left: -9px;
+      top: 0;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid white;
+    }
+    
+    .btn-primary {
+      background-color: var(--liberty-blue);
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      background-color: #1E40AF;
+      transform: translateY(-2px);
+    }
+    
+    .btn-outline {
+      border: 1px solid var(--liberty-blue);
+      color: var(--liberty-blue);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-outline:hover {
+      background-color: rgba(0, 82, 165, 0.1);
+      transform: translateY(-2px);
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <!-- Navigation -->
+  <nav class="header-gradient text-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-20 items-center">
+        <div class="flex items-center">
+          <div class="flex-shrink-0 flex items-center">
+            <div class="bg-white text-blue-800 rounded-lg w-10 h-10 flex items-center justify-center font-bold">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <span class="ml-3 text-xl font-bold">Policy Assessment</span>
+          </div>
+          <div class="hidden md:ml-10 md:flex md:space-x-8">
+            <a href="#" class="nav-item text-white px-1 pt-1 text-sm font-medium">Dashboard</a>
+            <a href="#" class="nav-item text-blue-200 hover:text-white px-1 pt-1 text-sm font-medium">Analyzer</a>
+            <a href="#" class="nav-item text-blue-200 hover:text-white px-1 pt-1 text-sm font-medium">Regulations</a>
+            <a href="#" class="nav-item text-blue-200 hover:text-white px-1 pt-1 text-sm font-medium">Reports</a>
+            <a href="#" class="nav-item text-blue-200 hover:text-white px-1 pt-1 text-sm font-medium">Settings</a>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div class="relative mr-4">
+            <button class="p-1 text-blue-200 hover:text-white">
+              <span class="sr-only">Notifications</span>
+              <i class="fas fa-bell text-xl"></i>
+            </button>
+            <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+          </div>
+          <div class="ml-3 relative">
+            <div>
+              <button class="flex text-sm rounded-full focus:outline-none">
+                <span class="sr-only">Open user menu</span>
+                <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-semibold">
+                  <i class="fas fa-user"></i>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">Dataset Compliance Analyzer</h1>
+        <p class="mt-2 text-gray-600">Upload AI datasets to assess compliance with global AI regulations</p>
+      </div>
+      <div class="mt-4 md:mt-0 flex space-x-3">
+        <button class="btn-outline px-4 py-2 rounded-lg text-sm font-medium flex items-center">
+          <i class="fas fa-file-export mr-2"></i> Export
+        </button>
+        <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center">
+          <i class="fas fa-plus mr-2"></i> New Analysis
+        </button>
+      </div>
+    </div>
+
+    <!-- Dataset Upload Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <!-- Upload Card -->
+      <div class="card col-span-1">
+        <div class="p-6">
+          <h2 class="text-xl font-semibold mb-4">Upload Dataset</h2>
+          <div id="uploadArea" class="upload-area p-8 text-center cursor-pointer mb-4">
+            <div class="text-blue-600 mb-3">
+              <i class="fas fa-cloud-upload-alt text-4xl"></i>
+            </div>
+            <p class="font-medium">Drag & drop dataset files</p>
+            <p class="text-sm text-gray-500 mt-1">or click to browse (CSV, JSON, Parquet)</p>
+            <input type="file" id="fileInput" class="hidden" accept=".csv,.json,.parquet">
+          </div>
+          <div class="text-xs text-gray-500">
+            <p>Supported formats: CSV, JSON, Parquet</p>
+            <p>Max file size: 2GB</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dataset Info -->
+      <div class="card col-span-2">
+        <div class="p-6">
+          <h2 class="text-xl font-semibold mb-4">Dataset Information</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="font-medium text-gray-700 mb-2">Selected Regulations</h3>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span class="badge" style="background-color: #BFDBFE; color: #1E40AF;">
+                  <i class="fas fa-flag-usa mr-1"></i> US EO 14110
+                </span>
+                <span class="badge" style="background-color: #FECACA; color: #B91C1C;">
+                  <i class="fas fa-flag-eu mr-1"></i> EU AI Act
+                </span>
+                <span class="badge" style="background-color: #FEF3C7; color: #B45309;">
+                  <i class="fas fa-flag-uk mr-1"></i> UK AI Framework
+                </span>
+              </div>
+              
+              <h3 class="font-medium text-gray-700 mb-2">Analysis Parameters</h3>
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-sm text-gray-600 mb-1">Bias Detection</label>
+                  <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                    <option>Comprehensive (recommended)</option>
+                    <option>Basic</option>
+                    <option>Disabled</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm text-gray-600 mb-1">Privacy Check</label>
+                  <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                    <option>GDPR Compliance</option>
+                    <option>CCPA Compliance</option>
+                    <option>Both</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="font-medium text-gray-700 mb-2">Quick Analysis</h3>
+              <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-sm font-medium">Data Provenance</span>
+                  <span class="text-sm font-medium text-green-600">Complete</span>
+                </div>
+                <div class="risk-meter">
+                  <div class="risk-meter-fill bg-green-500" style="width: 100%"></div>
+                </div>
+              </div>
+              
+              <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-sm font-medium">Bias Risk</span>
+                  <span class="text-sm font-medium text-yellow-600">Medium</span>
+                </div>
+                <div class="risk-meter">
+                  <div class="risk-meter-fill bg-yellow-400" style="width: 65%"></div>
+                </div>
+              </div>
+              
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-sm font-medium">Privacy Risk</span>
+                  <span class="text-sm font-medium text-red-600">High</span>
+                </div>
+                <div class="risk-meter">
+                  <div class="risk-meter-fill bg-red-500" style="width: 85%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analysis Results -->
+    <div class="card mb-8">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-semibold">Compliance Analysis Results</h2>
+          <div class="flex space-x-3">
+            <button class="btn-outline px-3 py-1 rounded-lg text-sm font-medium">
+              <i class="fas fa-filter mr-1"></i> Filter
+            </button>
+            <button class="btn-primary px-3 py-1 rounded-lg text-sm font-medium">
+              <i class="fas fa-download mr-1"></i> Export
+            </button>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <!-- Overall Compliance -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 text-center">
+            <div class="compliance-score mx-auto mb-4">
+              <svg viewBox="0 0 36 36" class="circular-chart">
+                <path class="circle-bg"
+                  d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                  fill="none"
+                  stroke="#E5E7EB"
+                  stroke-width="3"
+                />
+                <path class="circle"
+                  stroke-dasharray="72, 100"
+                  d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                  fill="none"
+                  stroke="#0052A5"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <div class="compliance-score-text text-blue-800">72%</div>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-1">Overall Compliance</h3>
+            <p class="text-sm text-gray-600">Meets 72% of selected regulatory requirements</p>
+          </div>
+          
+          <!-- Risk Summary -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6">
+            <h3 class="font-semibold text-gray-900 mb-4">Risk Summary</h3>
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span>Bias Risk</span>
+                  <span class="font-medium">Medium</span>
+                </div>
+                <div class="risk-meter">
+                  <div class="risk-meter-fill bg-yellow-400" style="width: 65%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span>Privacy Risk</span>
+                  <span class="font-medium">High</span>
+                </div>
+                <div class="risk-meter">
+                  <div class="risk-meter-fill bg-red-500" style="width: 85%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span>Transparency</span>
+                  <span class="font-medium">Good</span>
+                </div>
+                <div class="risk-meter">
+                  <div class="risk-meter-fill bg-blue-500" style="width: 78%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Action Items -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6">
+            <h3 class="font-semibold text-gray-900 mb-4">Action Items</h3>
+            <div class="space-y-4">
+              <div class="flex items-start">
+                <div class="bg-red-100 text-red-800 p-2 rounded-lg mr-3">
+                  <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div>
+                  <p class="font-medium">Address PII Exposure</p>
+                  <p class="text-sm text-gray-600">3 columns contain unprotected personal data</p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <div class="bg-yellow-100 text-yellow-800 p-2 rounded-lg mr-3">
+                  <i class="fas fa-balance-scale"></i>
+                </div>
+                <div>
+                  <p class="font-medium">Mitigate Bias</p>
+                  <p class="text-sm text-gray-600">Gender bias detected in training data</p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <div class="bg-blue-100 text-blue-800 p-2 rounded-lg mr-3">
+                  <i class="fas fa-file-alt"></i>
+                </div>
+                <div>
+                  <p class="font-medium">Document Provenance</p>
+                  <p class="text-sm text-gray-600">Add data lineage documentation</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Detailed Findings -->
+        <h3 class="font-semibold text-gray-900 mb-4">Detailed Findings</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Issue</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Severity</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Affected Data</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Regulation</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Privacy</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Unprotected PII</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="badge bg-red-100 text-red-800">Critical</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">email, phone, ssn</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">GDPR Art. 5</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Bias</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Gender imbalance</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="badge bg-yellow-100 text-yellow-800">Medium</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">gender column</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EU AI Act Art. 10</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Transparency</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Missing metadata</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="badge bg-blue-100 text-blue-800">Low</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">entire dataset</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">US EO 14110 Sec. 4</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Quality</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Null values >10%</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="badge bg-yellow-100 text-yellow-800">Medium</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">income, education</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">ISO/IEC 23053</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Regulation Timeline -->
+    <div class="card">
+      <div class="p-6">
+        <h2 class="text-xl font-semibold mb-6">Regulatory Timeline</h2>
+        <div class="space-y-8">
+          <div class="timeline-item">
+            <div class="timeline-dot bg-blue-500"></div>
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="font-semibold">EU AI Act Compliance</h3>
+                <p class="text-sm text-gray-600 mt-1">High-risk systems must meet transparency requirements</p>
+              </div>
+              <span class="text-sm text-gray-500">Due: Jan 1, 2025</span>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-dot bg-red-500"></div>
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="font-semibold">US Executive Order 14110</h3>
+                <p class="text-sm text-gray-600 mt-1">Develop safety standards for dual-use foundation models</p>
+              </div>
+              <span class="text-sm text-gray-500">Due: Jul 20, 2024</span>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-dot bg-green-500"></div>
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="font-semibold">UK AI Framework</h3>
+                <p class="text-sm text-gray-600 mt-1">Implement risk assessment protocols</p>
+              </div>
+              <span class="text-sm text-gray-500">Due: Mar 15, 2025</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-200 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="md:flex md:items-center md:justify-between">
+        <div class="flex justify-center md:order-2 space-x-6">
+          <a href="#" class="text-gray-400 hover:text-gray-500">
+            <span class="sr-only">Twitter</span>
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-gray-500">
+            <span class="sr-only">GitHub</span>
+            <i class="fab fa-github"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-gray-500">
+            <span class="sr-only">LinkedIn</span>
+            <i class="fab fa-linkedin"></i>
+          </a>
+        </div>
+        <div class="mt-8 md:mt-0 md:order-1">
+          <p class="text-center text-base text-gray-400">
+            &copy; 2025 Policy Assessment. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize upload functionality
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    
+    uploadArea.addEventListener('click', () => fileInput.click());
+    
+    ['dragover', 'dragenter'].forEach(event => {
+      uploadArea.addEventListener(event, (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+      });
+    });
+    
+    ['dragleave', 'dragend', 'drop'].forEach(event => {
+      uploadArea.addEventListener(event, () => {
+        uploadArea.classList.remove('dragover');
+      });
+    });
+    
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        handleFileUpload(e.dataTransfer.files[0]);
+      }
+    });
+    
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length) {
+        handleFileUpload(fileInput.files[0]);
+      }
+    });
+    
+    function handleFileUpload(file) {
+      // Show loading state
+      uploadArea.innerHTML = `
+        <div class="pulse">
+          <div class="text-blue-600 mb-3">
+            <i class="fas fa-spinner fa-spin text-4xl"></i>
+          </div>
+          <p class="font-medium">Analyzing ${file.name}</p>
+          <p class="text-sm text-gray-500 mt-1">This may take a few moments...</p>
+        </div>
+      `;
+      
+      // Simulate analysis
+      setTimeout(() => {
+        uploadArea.innerHTML = `
+          <div class="text-green-600 mb-3">
+            <i class="fas fa-check-circle text-4xl"></i>
+          </div>
+          <p class="font-medium">Analysis Complete</p>
+          <p class="text-sm text-gray-500 mt-1">${file.name}</p>
+        `;
+        
+        // Show results section
+        document.querySelector('.compliance-score-text').textContent = '72%';
+        document.querySelector('.circle').setAttribute('stroke-dasharray', '72, 100');
+      }, 3000);
+    }
+    
+    // Initialize compliance score chart
+    const complianceScore = 72;
+    const circle = document.querySelector('.circle');
+    const radius = circle.r.baseVal.value;
+    const circumference = radius * 2 * Math.PI;
+    
+    circle.style.strokeDasharray = `${circumference}`;
+    circle.style.strokeDashoffset = `${circumference - (complianceScore / 100) * circumference}`;
+  </script>
+</body>
+</html>
