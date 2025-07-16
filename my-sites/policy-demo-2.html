@@ -59,7 +59,7 @@
     }
     
     .badge {
-      display: inline-flex;
+      display: inline-flex;    
       align-items: center;
       padding: 4px 10px;
       border-radius: 20px;
@@ -94,6 +94,7 @@
     .risk-meter-fill {
       height: 100%;
       border-radius: 4px;
+      transition: width 0.5s ease;
     }
     
     .compliance-score {
@@ -168,6 +169,245 @@
     .pulse {
       animation: pulse 2s infinite;
     }
+
+    /* Chatbot Styles */
+    .chatbot-button {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 60px;
+      height: 60px;
+      background: var(--liberty-blue);
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0, 82, 165, 0.25);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .chatbot-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0, 82, 165, 0.35);
+    }
+
+    .chatbot-popup {
+      position: fixed;
+      bottom: 100px;
+      right: 24px;
+      width: 380px;
+      height: 450px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      display: none;
+      flex-direction: column;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .chatbot-popup.active {
+      display: flex;
+    }
+
+    .chatbot-header {
+      background: var(--liberty-blue);
+      color: white;
+      padding: 20px;
+      border-radius: 16px 16px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      background: #f9fafb;
+    }
+
+    .message {
+      margin-bottom: 16px;
+      display: flex ;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    .message-bubble {
+      max-width: 70%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .message.bot .message-bubble {
+      background: white;
+      color: #374151;
+      border: 1px solid #e5e7eb;
+    }
+
+    .message.user .message-bubble {
+      background: var(--liberty-blue);
+      color: white;
+    }
+
+    .chatbot-input {
+      padding: 20px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      gap: 12px;
+    }
+
+    .chatbot-input input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid #e5e7eb;
+      border-radius: 24px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .chatbot-input button {
+      background: var(--liberty-blue);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .chatbot-input button:hover {
+      background: #1E40AF;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Modal Styles */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    /* Notification Styles */
+    .notification {
+      position: fixed;
+      top: 100px;
+      right: 24px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 16px 24px;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+    }
+
+    .notification.show {
+      display: flex;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    /* Filter Dropdown */
+    .filter-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 16px;
+      display: none;
+      min-width: 200px;
+      z-index: 10;
+      margin-top: 8px;
+    }
+
+    .filter-dropdown.active {
+      display: block;
+    }
+
+    /* User Menu */
+    .user-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: none;
+      min-width: 200px;
+      z-index: 10;
+      margin-top: 8px;
+    }
+
+    .user-menu.active {
+      display: block;
+    }
+
+    .user-menu a {
+      display: block;
+      padding: 12px 16px;
+      color: #374151;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .user-menu a:hover {
+      background: #f9fafb;
+    }
   </style>
 </head>
 <body class="min-h-screen">
@@ -177,10 +417,7 @@
       <div class="flex justify-between h-20 items-center">
         <div class="flex items-center">
           <div class="flex-shrink-0 flex items-center">
-            <div class="bg-white text-blue-800 rounded-lg w-10 h-10 flex items-center justify-center font-bold">
-              <i class="fas fa-shield-alt"></i>
-            </div>
-            <span class="ml-3 text-xl font-bold">Policy Assessment</span>
+            <img src="https://www.broadridge.com/_Static-Assets/images/brodridgeLogo.svg" alt="Broadridge Logo" class="h-10 w-auto">
           </div>
           <div class="hidden md:ml-10 md:flex md:space-x-8">
             <a href="#" class="nav-item text-white px-1 pt-1 text-sm font-medium">Dashboard</a>
@@ -192,7 +429,7 @@
         </div>
         <div class="flex items-center">
           <div class="relative mr-4">
-            <button class="p-1 text-blue-200 hover:text-white">
+            <button class="p-1 text-blue-200 hover:text-white" onclick="toggleNotifications()">
               <span class="sr-only">Notifications</span>
               <i class="fas fa-bell text-xl"></i>
             </button>
@@ -200,12 +437,17 @@
           </div>
           <div class="ml-3 relative">
             <div>
-              <button class="flex text-sm rounded-full focus:outline-none">
+              <button class="flex text-sm rounded-full focus:outline-none" onclick="toggleUserMenu()">
                 <span class="sr-only">Open user menu</span>
                 <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-semibold">
                   <i class="fas fa-user"></i>
                 </div>
               </button>
+            </div>
+            <div class="user-menu" id="userMenu">
+              <a href="#" onclick="showProfile()">Profile</a>
+              <a href="#" onclick="showSettings()">Settings</a>
+              <a href="#" onclick="logout()">Logout</a>
             </div>
           </div>
         </div>
@@ -213,8 +455,7 @@
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Main Content --> <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
       <div>
@@ -222,10 +463,10 @@
         <p class="mt-2 text-gray-600">Upload AI datasets to assess compliance with global AI regulations</p>
       </div>
       <div class="mt-4 md:mt-0 flex space-x-3">
-        <button class="btn-outline px-4 py-2 rounded-lg text-sm font-medium flex items-center">
+        <button class="btn-outline px-4 py-2 rounded-lg text-sm font-medium flex items-center" onclick="exportReport()">
           <i class="fas fa-file-export mr-2"></i> Export
         </button>
-        <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center">
+        <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center" onclick="startNewAnalysis()">
           <i class="fas fa-plus mr-2"></i> New Analysis
         </button>
       </div>
@@ -243,12 +484,13 @@
             </div>
             <p class="font-medium">Drag & drop dataset files</p>
             <p class="text-sm text-gray-500 mt-1">or click to browse (CSV, JSON, Parquet)</p>
-            <input type="file" id="fileInput" class="hidden" accept=".csv,.json,.parquet">
+            <input type="file" id="fileInput" class="hidden" accept=".csv,.json,.parquet" multiple>
           </div>
           <div class="text-xs text-gray-500">
             <p>Supported formats: CSV, JSON, Parquet</p>
             <p>Max file size: 2GB</p>
           </div>
+          <div id="uploadedFiles" class="mt-4"></div>
         </div>
       </div>
 
@@ -260,14 +502,14 @@
             <div>
               <h3 class="font-medium text-gray-700 mb-2">Selected Regulations</h3>
               <div class="flex flex-wrap gap-2 mb-4">
-                <span class="badge" style="background-color: #BFDBFE; color: #1E40AF;">
+                <span class="badge cursor-pointer" style="background-color: #BFDBFE; color: #1E40AF;" onclick="toggleRegulation('us')">
                   <i class="fas fa-flag-usa mr-1"></i> US EO 14110
                 </span>
-                <span class="badge" style="background-color: #FECACA; color: #B91C1C;">
-                  <i class="fas fa-flag-eu mr-1"></i> EU AI Act
+                <span class="badge cursor-pointer" style="background-color: #FECACA; color: #B91C1C;" onclick="toggleRegulation('eu')">
+                  <i class="fas fa-flag mr-1"></i> EU AI Act
                 </span>
-                <span class="badge" style="background-color: #FEF3C7; color: #B45309;">
-                  <i class="fas fa-flag-uk mr-1"></i> UK AI Framework
+                <span class="badge cursor-pointer" style="background-color: #FEF3C7; color: #B45309;" onclick="toggleRegulation('uk')">
+                  <i class="fas fa-flag mr-1"></i> UK AI Framework
                 </span>
               </div>
               
@@ -275,18 +517,18 @@
               <div class="space-y-3">
                 <div>
                   <label class="block text-sm text-gray-600 mb-1">Bias Detection</label>
-                  <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                    <option>Comprehensive (recommended)</option>
-                    <option>Basic</option>
-                    <option>Disabled</option>
+                  <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" id="biasDetection" onchange="updateAnalysisParams()">
+                    <option value="comprehensive">Comprehensive (recommended)</option>
+                    <option value="basic">Basic</option>
+                    <option value="disabled">Disabled</option>
                   </select>
                 </div>
                 <div>
                   <label class="block text-sm text-gray-600 mb-1">Privacy Check</label>
-                  <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                    <option>GDPR Compliance</option>
-                    <option>CCPA Compliance</option>
-                    <option>Both</option>
+                  <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" id="privacyCheck" onchange="updateAnalysisParams()">
+                    <option value="both">Both</option>
+                    <option value="gdpr">GDPR Compliance</option>
+                    <option value="ccpa">CCPA Compliance</option>
                   </select>
                 </div>
               </div>
@@ -297,30 +539,30 @@
               <div class="bg-gray-50 p-4 rounded-lg mb-4">
                 <div class="flex items-center justify-between mb-2">
                   <span class="text-sm font-medium">Data Provenance</span>
-                  <span class="text-sm font-medium text-green-600">Complete</span>
+                  <span class="text-sm font-medium text-green-600" id="provenanceStatus">Complete</span>
                 </div>
                 <div class="risk-meter">
-                  <div class="risk-meter-fill bg-green-500" style="width: 100%"></div>
+                  <div class="risk-meter-fill bg-green-500" id="provenanceMeter" style="width: 100%"></div>
                 </div>
               </div>
               
               <div class="bg-gray-50 p-4 rounded-lg mb-4">
                 <div class="flex items-center justify-between mb-2">
                   <span class="text-sm font-medium">Bias Risk</span>
-                  <span class="text-sm font-medium text-yellow-600">Medium</span>
+                  <span class="text-sm font-medium text-yellow-600" id="biasStatus">Medium</span>
                 </div>
                 <div class="risk-meter">
-                  <div class="risk-meter-fill bg-yellow-400" style="width: 65%"></div>
+                  <div class="risk-meter-fill bg-yellow-400" id="biasMeter" style="width: 65%"></div>
                 </div>
               </div>
               
               <div class="bg-gray-50 p-4 rounded-lg">
                 <div class="flex items-center justify-between mb-2">
                   <span class="text-sm font-medium">Privacy Risk</span>
-                  <span class="text-sm font-medium text-red-600">High</span>
+                  <span class="text-sm font-medium text-red-600" id="privacyStatus">High</span>
                 </div>
                 <div class="risk-meter">
-                  <div class="risk-meter-fill bg-red-500" style="width: 85%"></div>
+                  <div class="risk-meter-fill bg-red-500" id="privacyMeter" style="width: 85%"></div>
                 </div>
               </div>
             </div>
@@ -330,6 +572,130 @@
     </div>
 
     <!-- Analysis Results -->
+    <div class="card mb-8" id="analysisResults" style="display: none;">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-semibold">Compliance Analysis Results</h2>
+          <div class="flex space-x-3">
+            <div class="relative">
+              <button class="btn-outline px-3 py-1 rounded-lg text-sm font-medium" onclick="toggleFilter()">
+                <i class="fas fa-filter mr-1"></i> Filter
+              </button>
+              <div class="filter-dropdown" id="filterDropdown">
+                <h4 class="font-medium mb-2">Filter by Severity</h4>
+                <label class="flex items-center mb-2">
+                  <input type="checkbox" class="mr-2" checked onchange="filterResults('critical')"> Critical
+                </label>
+                <label class="flex items-center mb-2">
+                  <input type="checkbox" class="mr-2" checked onchange="filterResults('medium')"> Medium
+                </label>
+                <label class="flex items-center">
+                  <input type="checkbox" class="mr-2" checked onchange="filterResults('low')"> Low
+                </label>
+              </div>
+            </div>
+            <button class="btn-primary px-3 py-1 rounded-lg text-sm font-medium" onclick="downloadDetailedReport()">
+              <i class="fas fa-download mr-1"></i> Export
+            </button>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <!-- Overall Compliance -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 text-center">
+            <div class="compliance-score mx-auto mb-4">
+              <svg viewBox="0 0 36 36" class="circular-chart">
+                <path class="circle-bg"
+                  d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                  fill="none"
+                  stroke="#E5E7EB"
+                  stroke-width="3"
+                />
+                <path class="circle"
+                  stroke-dasharray="0, 100"
+                  d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                  fill="none"
+                  stroke="#0052A5"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  id="complianceCircle"
+                />
+              </svg>
+              <div class="compliance-score-text text-blue-800" id="complianceScoreText">0%</div>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-1">Overall Compliance</h3>
+            <p class="text-sm text-gray-600" id="complianceDescription">Analyzing compliance...</p>
+          </div>
+          
+          <!-- Risk Summary -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6">
+            <h3 class="font-semibold text-gray-900 mb-4">Risk Summary</h3>
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span>Bias Risk</span>
+                  <span class="font-medium" id="biasRiskLevel">-</span>
+                </div>
+                <div class="risk-meter">
+                  <div class="risk-meter-fill bg-yellow-400" id="biasRiskMeter" style="width: 0%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span>Privacy Risk</span>
+                  <span class="font-medium" id="privacyRiskLevel">-</span>
+                </div>
+                <div class="risk-meter">
+                  <div class="risk-meter-fill bg-red-500" id="privacyRiskMeter" style="width: 0%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span>Transparency</span>
+                  <span class="font-medium" id="transparencyLevel">-</span>
+                </div>
+                <div class="risk-meter">
+                  <div class="risk-meter-fill bg-blue-500" id="transparencyMeter" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Action Items -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6">
+            <h3 class="font-semibold text-gray-900 mb-4">Action Items</h3>
+            <div class="space-y-4" id="actionItems">
+              <!-- Action items will be populated dynamically -->
+            </div>
+          </div>
+        </div>
+        
+        <!-- Detailed Findings -->
+        <h3 class="font-semibold text-gray-900 mb-4">Detailed Findings</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Issue</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Severity</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Affected Data</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Regulation</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200" id="findingsTableBody">
+              <!-- Findings will be populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+<!-- Analysis Results -->
     <div class="card mb-8">
       <div class="p-6">
         <div class="flex justify-between items-center mb-6">
@@ -498,12 +864,11 @@
         </div>
       </div>
     </div>
-
     <!-- Regulation Timeline -->
     <div class="card">
       <div class="p-6">
         <h2 class="text-xl font-semibold mb-6">Regulatory Timeline</h2>
-        <div class="space-y-8">
+        <div class="space-y-8" id="timeline">
           <div class="timeline-item">
             <div class="timeline-dot bg-blue-500"></div>
             <div class="flex justify-between items-start">
@@ -528,7 +893,7 @@
           
           <div class="timeline-item">
             <div class="timeline-dot bg-green-500"></div>
-            <div class="flex justify-between items-start">
+            <div class ="flex justify-between items-start">
               <div>
                 <h3 class="font-semibold">UK AI Framework</h3>
                 <p class="text-sm text-gray-600 mt-1">Implement risk assessment protocols</p>
@@ -568,7 +933,64 @@
     </div>
   </footer>
 
+  <!-- Chatbot Button -->
+  <div class="chatbot-button" onclick="toggleChatbot()">
+    <i class="fas fa-comments text-white text-2xl"></i>
+  </div>
+
+  <!-- Chatbot Popup -->
+  <div class="chatbot-popup" id="chatbotPopup">
+    <div class="chatbot-header">
+      <div>
+        <h3 class="text-lg font-semibold">Compliance Assistant</h3>
+        <p class="text-xs text-blue-200">Powered by Broadridge</p>
+      </div>
+      <button onclick="toggleChatbot()" class="text-white hover:text-blue-200">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+      <div class="message bot">
+        <div class="message-bubble">
+          👋 Hello! I'm your AI compliance assistant. I can help you understand regulatory requirements, analyze datasets, and provide compliance recommendations. How can I assist you today?
+        </div>
+      </div>
+    </div>
+    <div class="chatbot-input">
+      <input type="text" placeholder="Type your message..." id="chatInput" onkeypress="handleChatEnter(event)">
+      <button onclick="sendMessage()">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div class="notification" id="notification">
+    <i class="fas fa-check-circle text-green-500 text-xl"></i>
+    <span id="notificationText">Operation completed successfully</span>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-semibold" id="modalTitle">Modal Title</h2>
+        <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      <div id="modalContent">
+        <!-- Modal content will be inserted here -->
+      </div>
+    </div>
+  </div>
+
   <script>
+    // Global variables
+    let uploadedFiles = [];
+    let analysisData = null;
+    let selectedRegulations = ['us', 'eu', 'uk'];
+
     // Initialize upload functionality
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('fileInput');
@@ -591,16 +1013,21 @@
     uploadArea.addEventListener('drop', (e) => {
       e.preventDefault();
       if (e.dataTransfer.files.length) {
-        fileInput.files = e.dataTransfer.files;
-        handleFileUpload(e.dataTransfer.files[0]);
+        handleFiles(e.dataTransfer.files);
       }
     });
     
     fileInput.addEventListener('change', () => {
       if (fileInput.files.length) {
-        handleFileUpload(fileInput.files[0]);
+        handleFiles(fileInput.files);
       }
     });
+    
+    function handleFiles(files) {
+      for (let file of files) {
+        handleFileUpload(file);
+      }
+    }
     
     function handleFileUpload(file) {
       // Show loading state
@@ -614,30 +1041,710 @@
         </div>
       `;
       
+      uploadedFiles.push({
+        name: file.name,
+        size: (file.size / 1024 / 1024).toFixed(2) + ' MB',
+        type: file.type || 'Unknown'
+      });
+      
       // Simulate analysis
       setTimeout(() => {
         uploadArea.innerHTML = `
           <div class="text-green-600 mb-3">
             <i class="fas fa-check-circle text-4xl"></i>
           </div>
-          <p class="font-medium">Analysis Complete</p>
-          <p class="text-sm text-gray-500 mt-1">${file.name}</p>
+          <p class="font-medium">Upload Complete</p>
+          <p class="text-sm text-gray-500 mt-1">Click to add more files</p>
         `;
         
-        // Show results section
-        document.querySelector('.compliance-score-text').textContent = '72%';
-        document.querySelector('.circle').setAttribute('stroke-dasharray', '72, 100');
+        updateUploadedFilesList();
+        performAnalysis();
       }, 3000);
     }
     
-    // Initialize compliance score chart
-    const complianceScore = 72;
-    const circle = document.querySelector('.circle');
-    const radius = circle.r.baseVal.value;
-    const circumference = radius * 2 * Math.PI;
+    function updateUploadedFilesList() {
+      const container = document.getElementById('uploadedFiles');
+      container.innerHTML = uploadedFiles.map(file => `
+        <div class="bg-gray-50 p-3 rounded-lg mb-2 flex justify-between items-center">
+          <div>
+            <p class="font-medium text-sm">${file.name}</p>
+            <p class="text-xs text-gray-500">${file.size}</p>
+          </div>
+          <button onclick="removeFile('${file.name}')" class="text-red-500 hover:text-red-700">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      `).join('');
+    }
     
-    circle.style.strokeDasharray = `${circumference}`;
-    circle.style.strokeDashoffset = `${circumference - (complianceScore / 100) * circumference}`;
+    function removeFile(fileName) {
+      uploadedFiles = uploadedFiles.filter(f => f.name !== fileName);
+      updateUploadedFilesList();
+      if (uploadedFiles.length === 0) { document.getElementById('analysisResults').style.display = 'none';
+      }
+    }
+    
+    function performAnalysis() {
+      // Show analysis results
+      document.getElementById('analysisResults').style.display = 'block';
+      
+      // Animate compliance score
+      const targetScore = 72;
+      animateComplianceScore(targetScore);
+      
+      // Update risk meters
+      updateRiskMeters();
+      
+      // Populate action items
+      populateActionItems();
+      
+      // Populate findings table
+      populateFindings();
+      
+      // Show notification
+      showNotification('Analysis completed successfully');
+    }
+    
+    function animateComplianceScore(targetScore) {
+      const circle = document.getElementById('complianceCircle');
+      const text = document.getElementById('complianceScoreText');
+      const description = document.getElementById('complianceDescription');
+      
+      let currentScore = 0;
+      const duration = 2000;
+      const increment = targetScore / (duration / 50);
+      
+      const animation = setInterval(() => {
+        currentScore += increment;
+        if (currentScore >= targetScore) {
+          currentScore = targetScore;
+          clearInterval(animation);
+        }
+        
+        circle.setAttribute('stroke-dasharray', `${currentScore}, 100`);
+        text.textContent = Math.round(currentScore) + '%';
+        description.textContent = `Meets ${Math.round(currentScore)}% of selected regulatory requirements`;
+      }, 50);
+    }
+    
+    function updateRiskMeters() {
+      // Bias Risk
+      animateMeter('biasRiskMeter', 65);
+      document.getElementById('biasRiskLevel').textContent = 'Medium';
+      
+      // Privacy Risk
+      animateMeter('privacyRiskMeter', 85);
+      document.getElementById('privacyRiskLevel').textContent = 'High';
+      
+      // Transparency
+      animateMeter('transparencyMeter', 78);
+      document.getElementById('transparencyLevel').textContent = 'Good';
+    }
+    
+    function animateMeter(meterId, targetWidth) {
+      const meter = document.getElementById(meterId);
+      let currentWidth = 0;
+      const duration = 1000;
+      const increment = targetWidth / (duration / 50);
+      
+      const animation = setInterval(() => {
+        currentWidth += increment;
+        if (currentWidth >= targetWidth) {
+          currentWidth = targetWidth;
+          clearInterval(animation);
+        }
+        meter.style.width = currentWidth + '%';
+      }, 50);
+    }
+    
+    function populateActionItems() {
+      const actionItems = [
+        {
+          icon: 'fa-exclamation-circle',
+          color: 'red',
+          title: 'Address PII Exposure',
+          description: '3 columns contain unprotected personal data'
+        },
+        {
+          icon: 'fa-balance-scale',
+          color: 'yellow',
+          title: 'Mitigate Bias',
+          description: 'Gender bias detected in training data'
+        },
+        {
+          icon: 'fa-file-alt',
+          color: 'blue',
+          title: 'Document Provenance',
+          description: 'Add data lineage documentation'
+        }
+      ];
+      
+      const container = document.getElementById('actionItems');
+      container.innerHTML = actionItems.map(item => `
+        <div class="flex items-start cursor-pointer hover:bg-gray-50 p-2 rounded" onclick="showActionDetails('${item.title}')">
+          <div class="bg-${item.color}-100 text-${item.color}-800 p-2 rounded-lg mr-3">
+            <i class="fas ${item.icon}"></i>
+          </div>
+          <div>
+            <p class="font-medium">${item.title}</p>
+            <p class="text-sm text-gray-600">${item.description}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function populateFindings() {
+      const findings = [
+        {
+          category: 'Privacy',
+          issue: 'Unprotected PII',
+          severity: 'Critical',
+          severityColor: 'red',
+          affectedData: 'email, phone, ssn',
+          regulation: 'GDPR Art. 5'
+        },
+        {
+          category: 'Bias',
+          issue: 'Gender imbalance',
+          severity: 'Medium',
+          severityColor: 'yellow',
+          affectedData: 'gender column',
+          regulation: 'EU AI Act Art. 10'
+        },
+        {
+          category: 'Transparency',
+          issue: 'Missing metadata',
+          severity: 'Low',
+          severityColor: 'blue',
+          affectedData: 'entire dataset',
+          regulation: 'US EO 14110 Sec. 4'
+        },
+        {
+          category: 'Quality',
+          issue: 'Null values >10%',
+          severity: 'Medium',
+          severityColor: 'yellow',
+          affectedData: 'income, education',
+          regulation: 'ISO/IEC 23053'
+        }
+      ];
+      
+      const tbody = document.getElementById('findingsTableBody');
+      tbody.innerHTML = findings.map(finding => `
+        <tr class="finding-row" data-severity="${finding.severity.toLowerCase()}">
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${finding.category}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${finding.issue}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span class="badge bg-${finding.severityColor}-100 text-${finding.severityColor}-800">${finding.severity}</span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${finding.affectedData}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${finding.regulation}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm">
+            <button onclick="showFindingDetails('${finding.issue}')" class="text-blue-600 hover:text-blue-800">
+              View Details
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+    
+    // Chatbot functions
+    function toggleChatbot() {
+      const chatbot = document.getElementById('chatbotPopup');
+      chatbot.classList.toggle('active');
+    }
+    
+    function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+      
+      if (!message) return;
+      
+      // Add user message
+      addMessage(message, 'user');
+      input.value = '';
+      
+      // Simulate bot response
+      setTimeout(() => {
+        const response = generateBotResponse(message);
+        addMessage(response, 'bot');
+      }, 1000);
+    }
+    
+    function handleChatEnter(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    }
+    
+    function addMessage(text, sender) {
+      const messagesContainer = document.getElementById('chatMessages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${sender}`;
+      messageDiv.innerHTML = `<div class="message-bubble">${text}</div>`;
+      messagesContainer.appendChild(messageDiv);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+    
+    function generateBotResponse(message) {
+      const lowerMessage = message.toLowerCase();
+      
+      if (lowerMessage.includes('gdpr') || lowerMessage.includes('privacy')) {
+        return 'GDPR requires that personal data be processed lawfully, fairly, and transparently. Based on your dataset analysis, I recommend implementing data pseudonymization for the email, phone, and SSN columns to ensure compliance with Article 5.';
+      } else if (lowerMessage.includes('bias')) {
+        return 'Bias detection is crucial for AI fairness. Your dataset shows gender imbalance which could lead to discriminatory outcomes. Consider using techniques like re-sampling, SMOTE, or adjusting class weights to address this issue.';
+      } else if (lowerMessage.includes('eu ai act')) {
+        return 'The EU AI Act classifies AI systems based on risk levels. Your system may fall under high-risk category if used for employment, credit scoring, or law enforcement. High-risk systems must meet strict requirements for transparency, human oversight, and robustness.';
+      } else if (lowerMessage.includes('compliance') || lowerMessage.includes('score')) {
+        return 'Your current compliance score is 72%. To improve this, focus on: 1) Addressing PII exposure issues, 2) Mitigating detected biases, and 3) Adding comprehensive documentation for data provenance and model decisions.';
+      } else if (lowerMessage.includes('help')) {
+        return 'I can help you with:\n• Understanding regulatory requirements (GDPR, EU AI Act, US EO)\n• Analyzing compliance gaps\n• Providing remediation recommendations\n• Explaining technical compliance concepts\n\nWhat would you like to know more about?';
+      } else {
+        return 'I understand you\'re asking about "' + message + '". Could you please be more specific? I can help with regulatory compliance, dataset analysis, bias detection, privacy concerns, and compliance recommendations.';
+      }
+    }
+    
+    // Modal functions
+    function showModal(title, content) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalContent').innerHTML = content;
+      document.getElementById('modal').classList.add('active');
+    }
+    
+    function closeModal(event) {
+      if (!event || event.target.id === 'modal') {
+        document.getElementById('modal').classList.remove('active');
+      }
+    }
+    
+    // Notification functions
+    function showNotification(message, duration = 3000) {
+      const notification = document.getElementById('notification');
+      document.getElementById('notificationText').textContent = message;
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, duration);
+    }
+    
+    // Navigation functions
+    function toggleUserMenu() {
+      const menu = document.getElementById('userMenu');
+      menu.classList.toggle('active');
+    }
+    
+    function toggleNotifications() {
+      showModal('Notifications', `
+        <div class="space-y-4">
+          <div class="border-b pb-4">
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="font-semibold">New EU AI Act Guidelines</h4>
+                <p class="text-sm text-gray-600 mt-1">Updated requirements for high-risk AI systems</p>
+              </div>
+              <span class="text-xs text-gray-500">2h ago</span>
+            </div>
+          </div>
+          <div class="border-b pb-4">
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="font-semibold">Analysis Complete</h4>
+                <p class="text-sm text-gray-600 mt-1">Your dataset analysis for Project Alpha is ready</p>
+              </div>
+              <span class="text-xs text-gray-500">5h ago</span>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="font-semibold">Compliance Alert</h4>
+                <p class="text-sm text-gray-600 mt-1">GDPR audit scheduled for next week</p>
+              </div>
+              <span class="text-xs text-gray-500">1d ago</span>
+            </div>
+          </div>
+        </div>
+      `);
+    }
+    
+    function showProfile() {
+      showModal('User Profile', `
+        <div class="space-y-4">
+          <div class="text-center">
+            <div class="w-24 h-24 bg-blue-100 rounded-full mx-auto flex items-center justify-center text-blue-800 text-3xl mb-4">
+              <i class="fas fa-user"></i>
+            </div>
+            <h3 class="font-semibold text-lg">John Doe</h3>
+            <p class="text-gray-600">Compliance Analyst</p>
+          </div>
+          <div class="border-t pt-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Email</label>
+                <p class="text-sm text-gray-900">john.doe@company.com</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Department</label>
+                <p class="text-sm text-gray-900">Risk & Compliance</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Role</label>
+                <p class="text-sm text-gray-900">Senior Analyst</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Location</label>
+                <p class="text-sm text-gray-900">New York, NY</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `);
+    }
+    
+    function showSettings() {
+      showModal('Settings', `
+        <div class="space-y-6">
+          <div>
+            <h4 class="font-semibold mb-3">Notification Preferences</h4>
+            <div class="space-y-2">
+              <label class="flex items-center">
+                <input type="checkbox" class="mr-3" checked> Email notifications
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" class="mr-3" checked> In-app notifications
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" class="mr-3"> SMS alerts
+              </label>
+            </div>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-3">Default Analysis Settings</h4>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Bias Detection Level</label>
+                <select class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                  <option>Comprehensive</option>
+                  <option>Basic</option>
+                  <option>Disabled</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Privacy Standard</label>
+                <select class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                  <option>GDPR + CCPA</option>
+                  <option>GDPR Only</option>
+                  <option>CCPA Only</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="pt-4 border-t">
+            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">Save Settings</button>
+          </div>
+        </div>
+      `);
+    } function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        showNotification('Logging out...');
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 1500);
+      }
+    }
+    
+    // Filter functions
+    function toggleFilter() {
+      const dropdown = document.getElementById('filterDropdown');
+      dropdown.classList.toggle('active');
+    }
+    
+    function filterResults(severity) {
+      const rows = document.querySelectorAll('.finding-row');
+      rows.forEach(row => {
+        if (row.dataset.severity === severity) {
+          row.style.display = row.style.display === 'none' ? '' : 'none';
+        }
+      });
+    }
+    
+    // Export functions
+    function exportReport() {
+      showNotification('Generating report...');
+      setTimeout(() => {
+        showNotification('Report exported successfully');
+        // In a real app, this would trigger a download
+      }, 2000);
+    }
+    
+    function downloadDetailedReport() {
+      showNotification('Preparing detailed report...');
+      setTimeout(() => {
+        showNotification('Download started');
+        // In a real app, this would trigger a download
+      }, 1500);
+    }
+    
+    // Analysis functions
+    function startNewAnalysis() {
+      if (confirm('Start a new analysis? Current progress will be saved.')) {
+        // Reset the interface
+        uploadedFiles = [];
+        updateUploadedFilesList();
+        document.getElementById('analysisResults').style.display = 'none';
+        uploadArea.innerHTML = `
+          <div class="text-blue-600 mb-3">
+            <i class="fas fa-cloud-upload-alt text-4xl"></i>
+          </div>
+          <p class="font-medium">Drag & drop dataset files</p>
+          <p class="text-sm text-gray-500 mt-1">or click to browse (CSV, JSON, Parquet)</p>
+        `;
+        showNotification('Ready for new analysis');
+      }
+    }
+    
+    function toggleRegulation(regulation) {
+      const index = selectedRegulations.indexOf(regulation);
+      if (index > -1) {
+        selectedRegulations.splice(index, 1);
+      } else {
+        selectedRegulations.push(regulation);
+      }
+      showNotification(`${regulation.toUpperCase()} regulation ${index > -1 ? 'removed' : 'added'}`);
+    }
+    
+    function updateAnalysisParams() {
+      const biasDetection = document.getElementById('biasDetection').value;
+      const privacyCheck = document.getElementById('privacyCheck').value;
+      showNotification('Analysis parameters updated');
+    }
+    
+    function showActionDetails(actionTitle) {
+      const actionDetails = {
+        'Address PII Exposure': {
+          description: 'Personal Identifiable Information (PII) has been detected in your dataset without proper protection.',
+          recommendations: [
+            'Implement data pseudonymization for sensitive columns',
+            'Apply encryption at rest and in transit',
+            'Add access controls and audit logging',
+            'Consider data minimization principles'
+          ],
+          resources: [
+            'GDPR Article 32 - Security of processing',
+            'NIST Privacy Framework',
+            'ISO/IEC 27701:2019'
+          ]
+        },
+        'Mitigate Bias': {
+          description: 'Statistical analysis reveals potential bias in your training data that could lead to discriminatory outcomes.',
+          recommendations: [
+            'Apply re-sampling techniques to balance dataset',
+            'Use SMOTE (Synthetic Minority Over-sampling Technique)',
+            'Implement fairness metrics monitoring',
+            'Consider algorithmic debiasing methods'
+          ],
+          resources: [
+            'EU AI Act Article 10 - Data governance',
+            'IEEE Standards on Algorithmic Bias',
+            'Partnership on AI Fairness Guidelines'
+          ]
+        },
+        'Document Provenance': {
+          description: 'Your dataset lacks comprehensive documentation about its origin, collection methods, and processing history.',
+          recommendations: [
+            'Create detailed data cards for each dataset',
+            'Document collection methodology and dates',
+            'Include information about data sources',
+            'Maintain version control and change logs'
+          ],
+          resources: [
+            'US EO 14110 Section 4 - Transparency',
+            'Model Cards for Model Reporting',
+            'Data Sheets for Datasets'
+          ]
+        }
+      };
+      
+      const details = actionDetails[actionTitle];
+      if (details) {
+        showModal(actionTitle, `
+          <div class="space-y-4">
+            <p class="text-gray-700">${details.description}</p>
+            <div>
+              <h4 class="font-semibold mb-2">Recommendations:</h4>
+              <ul class="list-disc list-inside space-y-1">
+                ${details.recommendations.map(rec => `<li class="text-sm text-gray-600">${rec}</li>`).join('')}
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-2">Relevant Resources:</h4>
+              <ul class="space-y-1">
+                ${details.resources.map(res => `<li class="text-sm text-blue-600">${res}</li>`).join('')}
+              </ul>
+            </div>
+            <div class="pt-4">
+              <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium" onclick="closeModal()">
+                Understood
+              </button>
+            </div>
+          </div>
+        `);
+      }
+    }
+    
+    function showFindingDetails(issue) {
+      const findingDetails = {
+        'Unprotected PII': {
+          severity: 'Critical',
+          impact: 'High risk of data breach and regulatory non-compliance',
+          affectedRegulations: ['GDPR Article 5', 'CCPA Section 1798.100', 'PIPEDA Principle 7'],
+          remediationSteps: [
+            'Identify all columns containing PII',
+            'Apply appropriate encryption methods',
+            'Implement data masking for non-production environments',
+            'Set up access controls and monitoring'
+          ]
+        },
+        'Gender imbalance': {
+          severity: 'Medium',
+          impact: 'Potential for discriminatory outcomes in AI predictions',
+          affectedRegulations: ['EU AI Act Article 10', 'NYC Local Law 144'],
+          remediationSteps: [
+            'Analyze the extent of imbalance in the dataset',
+            'Apply appropriate rebalancing techniques',
+            'Implement bias testing in model validation',
+            'Document mitigation measures taken'
+          ]
+        },
+        'Missing metadata': {
+          severity: 'Low',
+          impact: 'Reduced transparency and potential compliance issues',
+          affectedRegulations: ['US EO 14110 Section 4', 'EU AI Act Article 13'],
+          remediationSteps: [
+            'Create comprehensive data documentation',
+            'Include collection dates and methods',
+            'Document any preprocessing steps',
+            'Maintain version control'
+          ]
+        },
+        'Null values >10%': {
+          severity: 'Medium',
+          impact: 'May affect model performance and reliability',
+          affectedRegulations: ['ISO/IEC 23053', 'EU AI Act Annex IV'],
+          remediationSteps: [
+            'Analyze patterns in missing data',
+            'Determine appropriate imputation strategy',
+            'Document handling of missing values',
+            'Consider impact on model fairness'
+          ]
+        }
+      };
+      
+      const details = findingDetails[issue];
+      if (details) {
+        showModal(`Finding: ${issue}`, `
+          <div class="space-y-4">
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div class="flex items-center">
+                <i class="fas fa-exclamation-triangle text-red-600 mr-3"></i>
+                <div>
+                  <p class="font-semibold text-red-800">Severity: ${details.severity}</p>
+                  <p class="text-sm text-red-700">${details.impact}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold mb-2">Affected Regulations:</h4>
+              <ul class="list-disc list-inside space-y-1">
+                ${details.affectedRegulations.map(reg => `<li class="text-sm text-gray-600">${reg}</li>`).join('')}
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold mb-2">Remediation Steps:</h4>
+              <ol class="list-decimal list-inside space-y-1">
+                ${details.remediationSteps.map(step => `<li class="text-sm text-gray-600">${step}</li>`).join('')}
+              </ol>
+            </div>
+            
+            <div class="pt-4 flex space-x-3">
+              <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium" onclick="createRemediationPlan('${issue}')">
+                Create Remediation Plan
+              </button>
+              <button class="btn-outline px-4 py-2 rounded-lg text-sm font-medium" onclick="closeModal()">
+                Close
+              </button>
+            </div>
+          </div>
+        `);
+      }
+    }
+    
+    function createRemediationPlan(issue) {
+      closeModal();
+      showNotification('Creating remediation plan...');
+      setTimeout(() => {
+        showModal('Remediation Plan Created', `
+          <div class="space-y-4">
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div class="flex items-center">
+                <i class="fas fa-check-circle text-green-600 mr-3"></i>
+                <div>
+                  <p class="font-semibold text-green-800">Plan Created Successfully</p>
+                  <p class="text-sm text-green-700">Remediation plan for "${issue}" has been created</p>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold mb-2">Plan Details:</h4>
+              <ul class="space-y-2">
+                <li class="text-sm"><span class="font-medium">ID:</span> REM-2025-001</li>
+                <li class="text-sm"><span class="font-medium">Priority:</span> High</li>
+                <li class="text-sm"><span class="font-medium">Assigned to:</span> Compliance Team</li>
+                <li class="text-sm"><span class="font-medium">Due Date:</span> ${new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString()}</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold mb-2">Next Steps:</h4>
+              <ol class="list-decimal list-inside space-y-1">
+                <li class="text-sm text-gray-600">Review plan with stakeholders</li>
+                <li class="text-sm text-gray-600">Allocate resources</li>
+                <li class="text-sm text-gray-600">Begin implementation</li>
+                <li class="text-sm text-gray-600">Schedule progress reviews</li>
+              </ol>
+            </div>
+            
+            <div class="pt-4">
+              <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium" onclick="closeModal()">
+                Got it
+              </button>
+            </div>
+          </div>
+        `);
+      }, 1500);
+    }
+    
+    // Initialize quick analysis meters on page load
+    window.addEventListener('load', () => {
+      // Animate initial meters
+      setTimeout(() => {
+        document.getElementById('provenanceMeter').style.width = '100%';
+        document.getElementById('biasMeter').style.width = '65%';
+        document.getElementById('privacyMeter').style.width = '85%';
+      }, 500);
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (event) => {
+      if (!event.target.closest('.relative')) {
+        document.getElementById('filterDropdown').classList.remove('active');
+        document.getElementById('userMenu').classList.remove('active');
+      }
+    });
   </script>
 </body>
 </html>
