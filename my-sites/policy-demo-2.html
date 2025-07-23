@@ -412,48 +412,221 @@
 </head>
 <body class="min-h-screen">
   <!-- Navigation -->
-  <nav class="header-gradient text-white shadow-lg">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-20 items-center">
-        <div class="flex items-center">
-          <div class="flex-shrink-0 flex items-center">
-            <img src="https://www.broadridge.com/_Static-Assets/images/brodridgeLogo.svg" alt="Broadridge Logo" class="h-10 w-auto">
-          </div>
-          <div class="hidden md:ml-10 md:flex md:space-x-8">
-            <a href="#" class="nav-item text-white px-1 pt-1 text-sm font-medium">Dashboard</a>
-            <a href="#" class="nav-item text-blue-200 hover:text-white px-1 pt-1 text-sm font-medium">Analyzer</a>
-            <a href="#" class="nav-item text-blue-200 hover:text-white px-1 pt-1 text-sm font-medium">Regulations</a>
-            <a href="#" class="nav-item text-blue-200 hover:text-white px-1 pt-1 text-sm font-medium">Reports</a>
-            <a href="#" class="nav-item text-blue-200 hover:text-white px-1 pt-1 text-sm font-medium">Settings</a>
-          </div>
+<nav class="header-gradient text-white shadow-lg">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-20 items-center">
+      <div class="flex items-center">
+        <div class="flex-shrink-0 flex items-center">
+          <img src="https://www.broadridge.com/_Static-Assets/images/brodridgeLogo.svg" alt="Broadridge Logo" class="h-10 w-auto">
         </div>
-        <div class="flex items-center">
-          <div class="relative mr-4">
-            <button class="p-1 text-blue-200 hover:text-white" onclick="toggleNotifications()">
-              <span class="sr-only">Notifications</span>
-              <i class="fas fa-bell text-xl"></i>
+        <div class="hidden md:ml-10 md:flex md:space-x-8">
+          <a href="#" onclick="showDashboard()" class="nav-item text-white px-1 pt-1 text-sm font-medium">Dashboard</a>
+          <a href="#" onclick="showSitePopup('Regulations', 'https://example.com')" class="nav-item text-blue-200 hover:text-white px-1 pt-1 text-sm font-medium">Regulations</a>
+          <a href="#" onclick="showSitePopup('Parse Data', 'https://example.com')" class="nav-item text-blue-200 hover:text-white px-1 pt-1 text-sm font-medium">Parse Data</a>
+        </div>
+      </div>
+      <div class="flex items-center">
+        <div class="relative mr-4">
+          <button class="p-1 text-blue-200 hover:text-white" onclick="toggleNotifications()">
+            <span class="sr-only">Notifications</span>
+            <i class="fas fa-bell text-xl"></i>
+          </button>
+          <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+        </div>
+        <div class="ml-3 relative">
+          <div>
+            <button class="flex text-sm rounded-full focus:outline-none" onclick="toggleUserMenu()">
+              <span class="sr-only">Open user menu</span>
+              <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-semibold">
+                <i class="fas fa-user"></i>
+              </div>
             </button>
-            <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
           </div>
-          <div class="ml-3 relative">
-            <div>
-              <button class="flex text-sm rounded-full focus:outline-none" onclick="toggleUserMenu()">
-                <span class="sr-only">Open user menu</span>
-                <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-semibold">
-                  <i class="fas fa-user"></i>
-                </div>
-              </button>
-            </div>
-            <div class="user-menu" id="userMenu">
-              <a href="#" onclick="showProfile()">Profile</a>
-              <a href="#" onclick="showSettings()">Settings</a>
-              <a href="#" onclick="logout()">Logout</a>
-            </div>
+          <div class="user-menu" id="userMenu">
+            <a href="#" onclick="showProfile()">Profile</a>
+            <a href="#" onclick="showSettings()">Settings</a>
+            <a href="#" onclick="logout()">Logout</a>
           </div>
         </div>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
+
+
+<!-- In-Page Popup -->
+<div id="site-popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+  <div class="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300">
+    
+    <!-- Popup Header -->
+    <div class="px-6 py-4 border-b border-gray-200">
+      <div class="flex items-center justify-between">
+        <h3 id="popup-title" class="text-lg font-semibold text-gray-900"></h3>
+        <button onclick="closeSitePopup()" class="text-gray-400 hover:text-gray-600 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Popup Content -->
+    <div class="px-6 py-6">
+      <div class="text-center">
+        
+        <!-- Site Info -->
+        <h4 class="text-xl font-semibold text-gray-900 mb-2">Opening External Site</h4>
+        <p class="text-gray-600 mb-4">You're about to visit:</p>
+        
+        <!-- URL Display -->
+        <div class="bg-gray-50 rounded-lg p-3 mb-6">
+          <p id="popup-url" class="text-blue-600 font-mono text-sm break-all"></p>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="space-y-3">
+          <button onclick="openSiteNow()" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+            Open Site
+          </button>
+          
+          <button onclick="openInNewWindow()" class="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a 2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path>
+            </svg>
+            Open in New Window
+          </button>
+          
+          <button onclick="closeSitePopup()" class="w-full bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            Cancel
+          </button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentPopupUrl = '';
+
+  function showSitePopup(sectionName, url) {
+    currentPopupUrl = url;
+    
+    // Set popup content
+    document.getElementById('popup-title').textContent = sectionName;
+    document.getElementById('popup-url').textContent = url;
+    
+    // Show popup with animation
+    const popup = document.getElementById('site-popup');
+    popup.classList.remove('hidden');
+    
+    // Animate popup
+    const popupContent = popup.querySelector('.bg-white');
+    popupContent.style.transform = 'scale(0.9)';
+    popupContent.style.opacity = '0';
+    
+    setTimeout(() => {
+      popupContent.style.transform = 'scale(1)';
+      popupContent.style.opacity = '1';
+    }, 10);
+    
+    // Update nav state
+    updateNavState(sectionName);
+  }
+
+  function openSiteNow() {
+    if (currentPopupUrl) {
+      window.open(currentPopupUrl, '_blank');
+      closeSitePopup();
+    }
+  }
+
+  function openInNewWindow() {
+    if (currentPopupUrl) {
+      const windowFeatures = 'width=1200,height=800,scrollbars=yes,resizable=yes,toolbar=yes,location=yes';
+      window.open(currentPopupUrl, '_blank', windowFeatures);
+      closeSitePopup();
+    }
+  }
+
+  function closeSitePopup() {
+    const popup = document.getElementById('site-popup');
+    const popupContent = popup.querySelector('.bg-white');
+    
+    popupContent.style.transform = 'scale(0.9)';
+    popupContent.style.opacity = '0';
+    
+    setTimeout(() => {
+      popup.classList.add('hidden');
+      popupContent.style.transform = '';
+      popupContent.style.opacity = '';
+    }, 300);
+    
+    // Reset to dashboard
+    showDashboard();
+  }
+
+  function showDashboard() {
+    const navLinks = document.querySelectorAll('.nav-item');
+    navLinks.forEach(link => {
+      link.classList.remove('text-white');
+      link.classList.add('text-blue-200');
+    });
+
+    navLinks[0].classList.remove('text-blue-200');
+    navLinks[0].classList.add('text-white');
+  }
+
+  function updateNavState(sectionName) {
+    const navLinks = document.querySelectorAll('.nav-item');
+    navLinks.forEach(link => {
+      link.classList.remove('text-white');
+      link.classList.add('text-blue-200');
+    });
+
+    event.target.classList.remove('text-blue-200');
+    event.target.classList.add('text-white');
+  }
+
+  // Close popup when clicking outside
+  document.getElementById('site-popup').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeSitePopup();
+    }
+  });
+
+  // ESC key to close popup
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeSitePopup();
+    }
+  });
+
+  // Existing functions for your navigation
+  function toggleNotifications() {
+    // Your notification toggle logic here
+  }
+
+  function toggleUserMenu() {
+    const userMenu = document.getElementById('userMenu');
+    userMenu.style.display = userMenu.style.display === 'block' ? 'none' : 'block';
+  }
+
+  function showProfile() {
+    // Your profile logic here
+  }
+
+  function showSettings() {
+    // Your settings logic here
+  }
+
+  function logout() {
+    // Your logout logic here
+  }
+</script>
 
   <!-- Main Content --> <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
@@ -934,35 +1107,209 @@
   </footer>
 
   <!-- Chatbot Button -->
-  <div class="chatbot-button" onclick="toggleChatbot()">
-    <i class="fas fa-comments text-white text-2xl"></i>
-  </div>
-
-  <!-- Chatbot Popup -->
-  <div class="chatbot-popup" id="chatbotPopup">
-    <div class="chatbot-header">
+  <!-- Chatbot -->
+<div class="chat-box" id="chatBox">
+  <div class="p-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-md">
+    <div class="flex items-center">
+      <div class="bg-white text-blue-600 rounded-lg w-8 h-8 flex items-center justify-center mr-3">
+        <i class="fa-solid fa-robot"></i>
+      </div>
       <div>
-        <h3 class="text-lg font-semibold">Compliance Assistant</h3>
-        <p class="text-xs text-blue-200">Powered by Broadridge</p>
+        <h4 class="font-semibold">AI Compliance Assistant</h4>
+        <p class="text-xs opacity-80">How can I help with regulations today?</p>
       </div>
-      <button onclick="toggleChatbot()" class="text-white hover:text-blue-200">
-        <i class="fas fa-times text-xl"></i>
-      </button>
-    </div>
-    <div class="chatbot-messages" id="chatMessages">
-      <div class="message bot">
-        <div class="message-bubble">
-          👋 Hello! I'm your AI compliance assistant. I can help you understand regulatory requirements, analyze datasets, and provide compliance recommendations. How can I assist you today?
-        </div>
-      </div>
-    </div>
-    <div class="chatbot-input">
-      <input type="text" placeholder="Type your message..." id="chatInput" onkeypress="handleChatEnter(event)">
-      <button onclick="sendMessage()">
-        <i class="fas fa-paper-plane"></i>
-      </button>
     </div>
   </div>
+  <div class="flex-1 p-4 overflow-y-auto" id="chatMessages">
+    <div class="mb-4 text-right">
+      <div class="inline-block bg-blue-100 rounded-lg px-4 py-2">
+        <p class="text-sm">What's the latest on the EU AI Act?</p>
+      </div>
+    </div>
+    <div class="mb-4">
+      <div class="bg-gray-100 rounded-lg px-4 py-2 inline-block">
+        <p class="text-sm">The EU AI Act has recently updated its classification for high-risk AI systems. The amendments specifically address generative AI systems and require additional transparency measures. Compliance deadlines begin in Q4 2024.</p>
+      </div>
+    </div>
+    <div class="mb-4">
+      <div class="bg-gray-100 rounded-lg px-4 py-2 inline-block">
+        <p class="text-sm">Would you like me to schedule a compliance review for your HR screening system? It's currently classified as high-risk under the new guidelines.</p>
+      </div>
+    </div>
+  </div>
+  <div class="p-3 border-t">
+    <button 
+      onclick="showSitePopup('AI Assistant', 'https://example.com')"
+      class="w-full bg-blue-600 text-white px-4 py-3 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors flex items-center justify-center"
+    >
+      <i class="fa-solid fa-external-link-alt mr-2"></i>
+      Open AI Assistant
+    </button>
+  </div>
+</div>
+
+<div class="chat-bot-toggle" onclick="toggleChatBox()">
+  <i class="fas fa-comments text-xl"></i>
+</div>
+
+<style>
+.chat-box {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 350px;
+  height: 500px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  display: none;
+  flex-direction: column;
+  z-index: 1000;
+  border: 1px solid #e5e7eb;
+}
+
+.chat-bot-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  color: white;
+  z-index: 1001;
+  transition: all 0.3s ease;
+}
+
+.chat-bot-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+</style>
+
+<script>
+// Initialize global variables if they don't exist
+if (typeof window.currentPopupUrl === 'undefined') {
+  window.currentPopupUrl = '';
+}
+if (typeof window.fromChatbot === 'undefined') {
+  window.fromChatbot = false;
+}
+
+// Chatbot toggle function
+function toggleChatBox() {
+  const chatBox = document.getElementById('chatBox');
+  if (chatBox.style.display === 'none' || chatBox.style.display === '') {
+    chatBox.style.display = 'flex';
+    chatBox.classList.add('slide-in');
+  } else {
+    chatBox.style.display = 'none';
+    chatBox.classList.remove('slide-in');
+  }
+}
+
+// Updated showSitePopup function to handle chatbot
+function showSitePopup(sectionName, url) {
+  // Set popup content
+  document.getElementById('popup-title').textContent = sectionName;
+  document.getElementById('popup-url').textContent = url;
+  
+  // Show popup with animation
+  const popup = document.getElementById('site-popup');
+  popup.classList.remove('hidden');
+  
+  // Animate popup
+  const popupContent = popup.querySelector('.bg-white');
+  popupContent.style.transform = 'scale(0.9)';
+  popupContent.style.opacity = '0';
+  
+  setTimeout(() => {
+    popupContent.style.transform = 'scale(1)';
+    popupContent.style.opacity = '1';
+  }, 10);
+  
+  // Check if this is from chatbot
+  if (sectionName === 'AI Assistant') {
+    window.fromChatbot = true;
+    // Close chatbox when opening popup
+    const chatBox = document.getElementById('chatBox');
+    if (chatBox) {
+      chatBox.style.display = 'none';
+    }
+  } else {
+    window.fromChatbot = false;
+    // Update nav state for navigation items
+    if (typeof updateNavState === 'function') {
+      updateNavState(sectionName);
+    }
+  }
+  
+  // Store URL for popup functions
+  window.currentPopupUrl = url;
+}
+
+// Updated closeSitePopup function
+function closeSitePopup() {
+  const popup = document.getElementById('site-popup');
+  const popupContent = popup.querySelector('.bg-white');
+  
+  popupContent.style.transform = 'scale(0.9)';
+  popupContent.style.opacity = '0';
+  
+  setTimeout(() => {
+    popup.classList.add('hidden');
+    popupContent.style.transform = '';
+    popupContent.style.opacity = '';
+  }, 300);
+  
+  // Clear the stored URL
+  window.currentPopupUrl = '';
+  
+  // Only call showDashboard if not from chatbot
+  if (!window.fromChatbot && typeof showDashboard === 'function') {
+    showDashboard();
+  }
+  
+  // Reset the chatbot flag
+  window.fromChatbot = false;
+}
+
+// Popup action functions
+function openSiteNow() {
+  if (window.currentPopupUrl) {
+    window.open( window.currentPopupUrl, '_blank');
+    closeSitePopup();
+  }
+}
+
+function openInNewWindow() {
+  if (window.currentPopupUrl) {
+    const windowFeatures = 'width=1200,height=800,scrollbars=yes,resizable=yes,toolbar=yes,location=yes';
+    window.open(window.currentPopupUrl, '_blank', windowFeatures);
+    closeSitePopup();
+  }
+}
+</script>
 
   <!-- Notification -->
   <div class="notification" id="notification">
