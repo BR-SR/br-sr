@@ -1088,5 +1088,94 @@ function openInNewWindow() {
     });
 
  </script>
+   <script>// Create demonstration banner that always shows at top of page
+(function() {
+  let banner;
+  let bannerDismissed = false;
+  
+  // Create banner function
+  function createBanner() {
+    if (banner || bannerDismissed) return;
+    
+    banner = document.createElement('div');
+    banner.innerHTML = 'For Demonstration Purposes Only';
+    
+    // Style the banner
+    banner.style.cssText = `
+      position: relative;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(107, 114, 128, 0.9);
+      color: white;
+      text-align: center;
+      padding: 6px 0;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: normal;
+      z-index: 99999;
+      backdrop-filter: blur(4px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+      opacity: 1;
+      cursor: pointer;
+      margin: 0;
+      box-sizing: border-box;
+    `;
+    
+    // Insert banner at the very beginning of body
+    document.body.insertBefore(banner, document.body.firstChild);
+    
+    // Add click handler to this specific banner instance
+    banner.addEventListener('click', handleBannerClick);
+  }
+  
+  // Remove banner function
+  function removeBanner() {
+    if (!banner) return;
+    
+    banner.style.opacity = '0';
+    banner.style.maxHeight = '0';
+    banner.style.padding = '0';
+    banner.style.overflow = 'hidden';
+    
+    setTimeout(() => {
+      if (banner && banner.parentNode) {
+        banner.parentNode.removeChild(banner);
+        banner = null;
+      }
+    }, 300);
+  }
+  
+  // Handle banner click
+  function handleBannerClick() {
+    bannerDismissed = true;
+    removeBanner();
+  }
+  
+  // Check scroll position and show/hide banner accordingly
+  function handleScroll() {
+    const isAtTop = window.scrollY <= 10;
+    
+    if (isAtTop && !bannerDismissed && !banner) {
+      createBanner();
+    } else if (!isAtTop && banner && !bannerDismissed) {
+      removeBanner();
+    }
+  }
+  
+  // Initial banner creation
+  createBanner();
+  
+  // Listen for scroll events
+  window.addEventListener('scroll', handleScroll);
+  
+  // Reset banner dismissed state when user refreshes or navigates
+  window.addEventListener('beforeunload', function() {
+    bannerDismissed = false;
+  });
+  
+  console.log('Demo notice added - always shows at top, click to permanently dismiss');
+})();</script>
 </body>
 </html>
